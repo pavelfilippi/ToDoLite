@@ -24,19 +24,17 @@ jobs:
           poetry install --no-root
 
 
-      - name: Run flake8 app Output File
-        run: poetry run flake8 . > flake8.txt
+      - name: Run flake8
+        run: poetry run flake8 . > flake8_report.txt
 
-      - id: get-comment-body
+      - name: Read flake8 report
+        id: read-flake8-report
         if: ${{ failure() }}
-        run: |
-          body="$(cat flake8.txt)"
-          body="${body//'%'/'%25'}"
-          body="${body//$'\n'/'%0A'}"
-          body="${body//$'\r'/'%0D'}"
-          echo "::set-output name=body::$body"
+        uses: juliangruber/read-file-action@v1
+        with:
+          path: flake8_report.txt
 
-      - name: Create comment
+      - name: Create comment with flake8 result
         if: ${{ failure() }}
         uses: peter-evans/create-or-update-comment@v2
         with:
@@ -44,6 +42,6 @@ jobs:
           body: |
             **flake8 Failure:**
             ```
-            ${{ steps.get-comment-body.outputs.body }}
+            ${{ steps.read-flake8-report.outputs.content }}
             ```
           reactions: eyes
