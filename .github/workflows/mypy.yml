@@ -1,0 +1,51 @@
+name: Mypy Static Typing
+
+on:
+  pull_request:
+
+jobs:
+  mypy-type-check:
+    runs-on: ubuntu-latest
+    name: Type Check
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.9"
+      - name: Run image
+        uses: abatilo/actions-poetry@v2
+        with:
+          poetry-version: "1.2"
+
+      - name: Install Poetry Dependencies
+        run: |
+          poetry config virtualenvs.in-project true
+          poetry install --no-root
+
+
+      - name: Run mypy app Output File
+        run: poetry run mypy app > mypy.txt
+
+
+      - name: Read Mypy result
+        id: get-comment-body
+        if: ${{ failure() }}
+        run: |
+          body="$(cat mypy.txt)"
+          body="${body//'%'/'%25'}"
+          body="${body//$'\n'/'%0A'}"
+          body="${body//$'\r'/'%0D'}" 
+          echo "::set-output name=body::$body"
+
+      - name: Create comment with mypy results
+        if: ${{ failure() }}
+        uses: peter-evans/create-or-update-comment@v2
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            **mypy Failure:**
+            ```
+            ${{ steps.get-comment-body.outputs.body }}
+            ```
+          reactions: eyes
