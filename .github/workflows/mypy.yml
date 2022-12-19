@@ -25,7 +25,7 @@ jobs:
 
 
       - name: Run mypy app Output File
-        run: poetry run mypy app > mypy.txt
+        run: poetry run mypy . > mypy.txt
 
 
       - name: Read Mypy result
