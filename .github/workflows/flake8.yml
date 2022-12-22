@@ -1,0 +1,47 @@
+name: flake8 Lint
+
+on:
+  pull_request:
+
+jobs:
+  flake8-lint:
+    runs-on: ubuntu-latest
+    name: Lint
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.9"
+      - name: Run image
+        uses: abatilo/actions-poetry@v2
+        with:
+          poetry-version: "1.2"
+
+      - name: Install Poetry Dependencies
+        run: |
+          poetry config virtualenvs.in-project true
+          poetry install --no-root
+
+
+      - name: Run flake8
+        run: poetry run flake8 . > flake8_report.txt
+
+      - name: Read flake8 report
+        id: read-flake8-report
+        if: ${{ failure() }}
+        uses: juliangruber/read-file-action@v1
+        with:
+          path: flake8_report.txt
+
+      - name: Create comment with flake8 result
+        if: ${{ failure() }}
+        uses: peter-evans/create-or-update-comment@v2
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            **flake8 Failure:**
+            ```
+            ${{ steps.read-flake8-report.outputs.content }}
+            ```
+          reactions: eyes
