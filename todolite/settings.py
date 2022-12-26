@@ -31,14 +31,14 @@ ALLOWED_HOSTS: List[str] = []
 # Application definition
 
 INSTALLED_APPS = [
+    "tasks.apps.TasksConfig",
+    "account.apps.AccountConfig",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "tasks.apps.TasksConfig",
-    "account.apps.AccountConfig",
     "crispy_forms",
     "crispy_bootstrap5",
 ]
