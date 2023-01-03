@@ -7,11 +7,17 @@
         <div class="row py-lg-5">
             <div class="col-lg-6 col-md-8 mx-auto">
                 <h1 class="fw-light">ToDoLite</h1>
-                <p class="lead text-muted">"Effortlessly manage your tasks and stay organized with ToDoLite, the
+                <p class="lead text-muted">
+                    "Effortlessly manage your tasks and stay organized with ToDoLite, the
                     ultimate to-do list app. Say goodbye to missed deadlines and lost tasks, and hello to increased
-                    productivity and a more streamlined life."</p>
-                <small class="text-muted ">You can <a href="{% url 'account:register' %}" class="text-reset">register here</a>. Already have an
-                    account? <a href="{% url 'account:login' %}" class="text-reset">Login here</a></small>
+                    productivity and a more streamlined life."
+                </p>
+                {% if not user.is_authenticated %}
+                    <small class="text-muted ">
+                        You can <a href="{% url 'account:register' %}" class="text-reset">register here</a>.
+                        Already have an account? <a href="{% url 'login' %}" class="text-reset">Login here</a>
+                    </small>
+                {% endif %}
             </div>
         </div>
     </section>
