@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, HttpResponseRedirect
 
 from .forms import TaskForm
@@ -11,6 +12,7 @@ def home(request):
     )
 
 
+@login_required
 def create_task(request):
     if request.method == "POST":
         form = TaskForm(request.POST)
