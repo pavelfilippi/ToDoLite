@@ -24,8 +24,7 @@ def create_task(request):
             task.author = request.user.profile
             task.save()
             messages.success(request, "New task created.")
-            # TODO: Don't redirect to home, but to list when ready
-            return HttpResponseRedirect(request.path_info)
+            return redirect("tasks:task-list")
     else:
         form = TaskForm()
     return render(request, "tasks/create.html", {"form": form})
