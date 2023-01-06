@@ -23,7 +23,7 @@
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     {% if request.user.is_authenticated %}
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Tasks</a>
+                            <a class="nav-link" href="{% url 'tasks:task-list' %}">Tasks</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">Account</a>
@@ -52,11 +52,13 @@
 
 <main id="content">
     {% if messages %}
-        {% for message in messages %}
-            <div class="alert alert-{{ message.tags }}">
-                {{ message }}
-            </div>
-        {% endfor %}
+        <div class="container py-1 h-100">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
     {% endif %}
     {% block content %}
     {% endblock content %}

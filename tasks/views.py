@@ -1,8 +1,11 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, HttpResponseRedirect
+from django.db.models import F
+from django.db.models.functions import Lower
+from django.shortcuts import render, redirect
 
 from .forms import TaskForm
+from .models import Task
 
 
 def home(request):
@@ -21,8 +24,19 @@ def create_task(request):
             task.author = request.user.profile
             task.save()
             messages.success(request, "New task created.")
-            # TODO: Don't redirect to home, but to list when ready
-            return HttpResponseRedirect(request.path_info)
+            return redirect("tasks:task-list")
     else:
         form = TaskForm()
     return render(request, "tasks/create.html", {"form": form})
+
+
+@login_required
+def list_task(request):
+    """ Return all tasks for given user ordered by due_date, title, with null 'due date' tasks last """
+    task_list = Task.objects.filter(author=request.user.profile.id).order_by(
+        F("due_date").asc(nulls_last=True), Lower("title").asc()
+    )
+
+    context = {"tasks": task_list}
+
+    return render(request, "tasks/list.html", context)
