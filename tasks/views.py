@@ -33,7 +33,6 @@ def create_task(request):
 @login_required
 def list_task(request):
     """ Return all tasks for given user ordered by due_date, title, with null 'due date' tasks last """
-    # TODO: Figure out what is used for ordering rows with `null` due date
     task_list = Task.objects.filter(author=request.user.profile.id).order_by(
         F("due_date").asc(nulls_last=True), Lower("title").asc()
     )
