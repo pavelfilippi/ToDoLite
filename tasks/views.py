@@ -4,7 +4,7 @@ from django.db.models import F
 from django.db.models.functions import Lower
 from django.shortcuts import render, redirect, get_object_or_404
 
-from .forms import TaskForm
+from .forms import TaskForm, TaskEditForm
 from .models import Task
 
 
@@ -43,9 +43,18 @@ def list_task(request):
 
 
 @login_required
-def task_detail(request, pk):
-    """Display task detail"""
-    task = get_object_or_404(Task, pk=pk, author=request.user.profile)
-    context = {"task": task}
+def edit_task(request, pk):
+    """Edit task"""
+    task = Task.objects.get(author=request.user.profile, pk=pk)
+    if request.method == "POST":
+        task_form = TaskEditForm(instance=task, data=request.POST)
+        if task_form.is_valid():
+            task_form.save()
+            messages.success(request, "Task updated successfully")
+            return redirect("tasks:task-list")
+        else:
+            messages.error(request, "Error updating your task")
+    else:
+        task_form = TaskEditForm(instance=task)
 
-    return render(request, "tasks/detail.html", context)
+    return render(request, "tasks/edit.html", {"form": task_form})
