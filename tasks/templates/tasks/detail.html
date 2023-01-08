@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block title %}{{ task.title }}{% endblock %}
+
+{% block content %}
+    <h1>{{ task.title }}</h1>
+    <p>Due date: {{ task.due_date }}</p>
+    <small>Completed: {{ task.completed }}</small>
+{% endblock content %}

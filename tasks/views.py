@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import F
 from django.db.models.functions import Lower
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 
 from .forms import TaskForm
 from .models import Task
@@ -32,7 +32,7 @@ def create_task(request):
 
 @login_required
 def list_task(request):
-    """ Return all tasks for given user ordered by due_date, title, with null 'due date' tasks last """
+    """Return all tasks for given user ordered by due_date, title, with null 'due date' tasks last"""
     task_list = Task.objects.filter(author=request.user.profile.id).order_by(
         F("due_date").asc(nulls_last=True), Lower("title").asc()
     )
@@ -40,3 +40,12 @@ def list_task(request):
     context = {"tasks": task_list}
 
     return render(request, "tasks/list.html", context)
+
+
+@login_required
+def task_detail(request, pk):
+    """Display task detail"""
+    task = get_object_or_404(Task, pk=pk, author=request.user.profile)
+    context = {"task": task}
+
+    return render(request, "tasks/detail.html", context)
