@@ -4,7 +4,7 @@ from django.db.models import F
 from django.db.models.functions import Lower
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
-from django.urls import reverse_lazy, reverse
+from django.urls import reverse
 
 from .forms import TaskForm, TaskEditForm
 from .models import Task
