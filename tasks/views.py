@@ -2,7 +2,9 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import F
 from django.db.models.functions import Lower
-from django.shortcuts import render, redirect
+from django.http import HttpResponseRedirect
+from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse
 
 from .forms import TaskForm, TaskEditForm
 from .models import Task
@@ -58,3 +60,14 @@ def edit_task(request, pk):
         task_form = TaskEditForm(instance=task)
 
     return render(request, "tasks/edit.html", {"form": task_form})
+
+
+@login_required
+def delete_task(request, pk):
+    task = get_object_or_404(Task, author=request.user.profile, pk=pk)
+
+    if request.method == "POST":
+        task.delete()
+        return HttpResponseRedirect(reverse("tasks:task-list"))
+
+    return render(request, "tasks/delete.html", context={"task": task})
