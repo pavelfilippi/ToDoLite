@@ -21,14 +21,19 @@
                         </thead>
                         <tbody>
                         {% for t in tasks %}
-                            <tr>
+                            <tr id="#task-{{ t.id }}">
                                 <td style="word-wrap: break-word;min-width: 160px;max-width: 800px;">
                                     <p class="fw-normal mb-1">{{ t.title }}</p>
                                 </td>
                                 <td>
                                     <p class="fw-normal mb-1">{{ t.due_date }}</p>
                                 </td>
-                                <td>{{ t.completed }}</td>
+                                <td>
+                                    <select id="#task-{{ t.id }}" hx-post="{% url 'tasks:task-completed' t.pk %}">
+                                        <option value="False" {% if not t.completed %} selected {% endif %}>False</option>
+                                        <option value="True" {% if t.completed %} selected {% endif %}>True</option>
+                                    </select>
+                                </td>
                                 <td><a class="link-secondary" href="{% url 'tasks:task-edit' t.pk %}">edit</a></td>
                                 <td><a class="link-secondary" href="{% url 'tasks:task-delete' t.pk %}">delete</a></td>
                             </tr>

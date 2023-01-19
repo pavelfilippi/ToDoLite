@@ -71,3 +71,19 @@ def delete_task(request, pk):
         return HttpResponseRedirect(reverse("tasks:task-list"))
 
     return render(request, "tasks/delete.html", context={"task": task})
+
+
+@login_required
+def mark_completed(request, pk):
+    task = get_object_or_404(Task, author=request.user.profile, pk=pk)
+    if request.method == "POST":
+        task.completed = request.POST.get("completed") == "True"
+        task.save()
+
+    task_list = Task.objects.filter(author=request.user.profile.id).order_by(
+        F("due_date").asc(nulls_last=True), Lower("title").asc()
+    )
+
+    context = {"tasks": task_list}
+
+    return render(request, "tasks/list.html", context)
