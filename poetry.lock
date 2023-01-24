@@ -122,6 +122,17 @@ django = "*"
 typing-extensions = "*"
 
 [[package]]
+name = "django-taggit"
+version = "3.1.0"
+description = "django-taggit is a reusable Django application for simple tagging."
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.dependencies]
+Django = ">=3.2"
+
+[[package]]
 name = "flake8"
 version = "6.0.0"
 description = "the modular source code checker: pep8 pyflakes and co"
@@ -256,7 +267,7 @@ python-versions = ">=2"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "0f5b0a2b95279beec8887a83ebe1a8b68b27f4172d73ee938a8ca28d3a05f8c2"
+content-hash = "172215a6da56315082d7d4ffa48a9ad62a6e9788af6971aa2a67b45c92c8987d"
 
 [metadata.files]
 asgiref = [
@@ -277,6 +288,7 @@ django-crispy-forms = [
 ]
 django-stubs = []
 django-stubs-ext = []
+django-taggit = []
 flake8 = []
 mccabe = []
 mypy = []

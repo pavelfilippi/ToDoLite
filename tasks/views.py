@@ -5,7 +5,7 @@ from django.db.models.functions import Lower
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
-
+from taggit.models import Tag
 from .forms import TaskForm, TaskEditForm
 from .models import Task
 
@@ -25,6 +25,7 @@ def create_task(request):
             task = form.save(commit=False)
             task.author = request.user.profile
             task.save()
+            form.save_m2m()
             messages.success(request, "New task created.")
             return redirect("tasks:task-list")
     else:
@@ -33,11 +34,15 @@ def create_task(request):
 
 
 @login_required
-def list_task(request):
+def list_task(request, tag_slug=None):
     """Return all tasks for given user ordered by due_date, title, with null 'due date' tasks last"""
     task_list = Task.objects.filter(author=request.user.profile.id).order_by(
         F("due_date").asc(nulls_last=True), Lower("title").asc()
     )
+    tag = None
+    if tag_slug:
+        tag = get_object_or_404(Tag, slug=tag_slug)
+        task_list = task_list.filter(tags__in=[tag])
 
     context = {"tasks": task_list}
 

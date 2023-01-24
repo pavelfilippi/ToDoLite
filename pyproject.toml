@@ -10,6 +10,7 @@ python = "^3.10"
 Django = "^4.1.4"
 django-crispy-forms = "^1.14.0"
 crispy-bootstrap5 = "^0.7"
+django-taggit = "^3.1.0"
 
 [tool.poetry.dev-dependencies]
 black = "^22.12.0"
@@ -26,6 +27,12 @@ line-length = 120
 
 [tool.mypy]
 plugins = ["mypy_django_plugin.main"]
+
+[[tool.mypy.overrides]]
+module = [
+    "taggit.*",
+]
+ignore_missing_imports = true
 
 [tool.django-stubs]
 django_settings_module = "todolite.settings"
