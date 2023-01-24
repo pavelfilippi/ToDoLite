@@ -1,5 +1,6 @@
 from django import forms
 from django.utils import timezone
+from taggit.forms import TagWidget
 
 from .models import Task
 
@@ -7,9 +8,10 @@ from .models import Task
 class TaskForm(forms.ModelForm):
     class Meta:
         model = Task
-        fields = ["title", "due_date"]
+        fields = ["title", "due_date", "tags"]
         widgets = {
             "due_date": forms.DateInput(attrs={"class": "datepicker", "type": "date"}),
+            "tags": TagWidget(),
         }
 
     def clean_due_date(self):
@@ -25,12 +27,14 @@ class TaskEditForm(forms.ModelForm):
         self.fields["title"].required = False
         self.fields["due_date"].required = False
         self.fields["completed"].required = False
+        self.fields["tags"].required = False
 
     class Meta:
         model = Task
-        fields = ["title", "due_date", "completed"]
+        fields = ["title", "due_date", "completed", "tags"]
         widgets = {
             "due_date": forms.DateInput(attrs={"class": "datepicker", "type": "date"}),
+            "tags": TagWidget(),
         }
 
     def clean_due_date(self):
