@@ -9,14 +9,26 @@
         <div class="container py-3 h-100">
             <div class="row d-flex justify-content-center align-items-center h-100">
                 <div class="col-lg-8 col-xl-12">
+                    <div class="float-end">
+                        <div class="btn-group" role="group" aria-label="Toggle task status">
+                            <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off"
+                                   checked>
+                            <label class="btn btn-outline-secondary" for="btnradio1">All</label>
+
+                            <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
+                            <label class="btn btn-outline-secondary" for="btnradio2">Completed</label>
+
+                            <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off">
+                            <label class="btn btn-outline-secondary" for="btnradio3">ToDo</label>
+                        </div>
+                    </div>
                     <table class="table align-middle mb-0 bg-white">
                         <thead>
-                        <tr>
-                            <th>Title</th>
-                            <th>Due Date</th>
-                            <th>Completed</th>
-                            <th></th>
-                            <th></th>
+                        <th>Title</th>
+                        <th>Due Date</th>
+                        <th>Completed</th>
+                        <th></th>
+                        <th></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -38,7 +50,8 @@
                                 </td>
                                 <td>{{ t.completed }}</td>
                                 <td><a class="link-secondary" href="{% url 'tasks:task-edit' t.pk %}">edit</a></td>
-                                <td><a class="link-secondary" href="{% url 'tasks:task-delete' t.pk %}">delete</a></td>
+                                <td><a class="link-secondary" href="{% url 'tasks:task-delete' t.pk %}">delete</a>
+                                </td>
                             </tr>
                         {% endfor %}
                         </tbody>
