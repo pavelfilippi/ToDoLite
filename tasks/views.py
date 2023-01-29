@@ -1,12 +1,14 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
 from django.db.models import F
 from django.db.models.functions import Lower
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from taggit.models import Tag
-from .forms import TaskForm, TaskEditForm
+
+from .forms import TaskForm, TaskEditForm, SearchForm
 from .models import Task
 
 
@@ -76,3 +78,27 @@ def delete_task(request, pk):
         return HttpResponseRedirect(reverse("tasks:task-list"))
 
     return render(request, "tasks/delete.html", context={"task": task})
+
+
+@login_required
+def search_task(request):
+    """ Search task by its title """
+
+
+def post_search(request):
+    form = SearchForm()
+    query = None
+    results = []
+
+    if "query" in request.GET:
+        form = SearchForm(request.GET)
+        if form.is_valid():
+            query = form.cleaned_data["query"]
+            # config below sets stemming in another languages, ie config="spanish"
+            search_vector = SearchVector("title", "body", config="english")
+            search_query = SearchQuery(query, config="english")
+            results = Task.objects.annotate(
+                search=search_vector, rank=SearchRank(search_vector, search_query)
+            ).filter(search=search_query).order_by("-rank")
+
+    return render(request, "tasks/search.html", {"form": form, "query": query, "results": results})

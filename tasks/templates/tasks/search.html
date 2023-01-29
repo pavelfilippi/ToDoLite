@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}Create a task{% endblock title %}
+
+{% block content %}
+    {% if query %}
+
+        <section class="h-100 h-custom">
+            <div class="container py-3 h-100">
+                <div class="row d-flex justify-content-center align-items-center h-100">
+                    <div class="col-lg-8 col-xl-12">
+                        <table class="table align-middle mb-0 bg-white">
+                            <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Due Date</th>
+                                <th>Completed</th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for t in tasks %}
+                                <tr>
+                                    <td style="word-wrap: break-word;min-width: 160px;max-width: 800px;">
+                                        <p class="fw-normal mb-1">{{ t.title }}</p>
+                                        {% if t.tags.all %}
+                                            {% for tag in t.tags.all %}
+                                                <a href="{% url "tasks:task-list-by-tag" tag.slug %}"
+                                                   class="text-decoration-none badge rounded-pill bg-info text-dark">
+                                                    {{ tag.name }}
+                                                </a>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <p class="fw-normal mb-1">{{ t.due_date }}</p>
+                                    </td>
+                                    <td>{{ t.completed }}</td>
+                                    <td><a class="link-secondary" href="{% url 'tasks:task-edit' t.pk %}">edit</a></td>
+                                    <td><a class="link-secondary" href="{% url 'tasks:task-delete' t.pk %}">delete</a>
+                                    </td>
+                                </tr>
+                            {% empty %}
+                                <p>There are no results for your query.</p>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <p><a href="{% url 'tasks:task-search' %}">Search again</a></p>
+    {% else %}
+        <h1>Search for posts</h1>
+        <form method="get">
+            {{ form.as_p }}
+            <input type="submit" value="Search">
+        </form>
+    {% endif %}
+{% endblock content %}
