@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login
@@ -38,3 +39,11 @@ def user_login(request):
     else:
         form = LoginForm()
     return render(request, "registration/login.html", {"form": form})
+
+
+@login_required
+def profile_detail(request):
+    """Display user profile detail"""
+    user_profile = Profile.objects.get(id=request.user.profile.id)
+
+    return render(request, "account/detail.html", {"user_profile": user_profile})
