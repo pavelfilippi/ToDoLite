@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "crispy_forms",
     "crispy_bootstrap5",
     "taggit",
+    "django.contrib.postgres",
 ]
 
 MIDDLEWARE = [
@@ -78,10 +79,13 @@ WSGI_APPLICATION = "todolite.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
+# TODO: Should be removed/hidden if ever deployed somewhere!
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "todolite",
+        "USER": "todolite",
+        "PASSWORD": "todolite",
     }
 }
 
