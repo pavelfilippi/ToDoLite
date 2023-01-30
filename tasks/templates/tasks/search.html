@@ -5,7 +5,6 @@
 
 {% block content %}
     {% if query %}
-
         <section class="h-100 h-custom">
             <div class="container py-3 h-100">
                 <div class="row d-flex justify-content-center align-items-center h-100">
@@ -43,20 +42,21 @@
                                     </td>
                                 </tr>
                             {% empty %}
-                                <p>There are no results for your query.</p>
+                                <h5 class="text-warning">There are no results for query '{{ query }}'.</h5>
                             {% endfor %}
                             </tbody>
                         </table>
                     </div>
                 </div>
+                <div class="mt-4"><a href="{% url 'tasks:task-search' %}">Search again</a></div>
             </div>
         </section>
-        <p><a href="{% url 'tasks:task-search' %}">Search again</a></p>
     {% else %}
-        <h1>Search for posts</h1>
-        <form method="get">
-            {{ form.as_p }}
-            <input type="submit" value="Search">
-        </form>
+        <div class="container py-3 h-100">
+            <form method="get">
+                {{ form | crispy }}
+                <input type="submit" value="Search">
+            </form>
+        </div>
     {% endif %}
 {% endblock content %}

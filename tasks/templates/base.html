@@ -33,6 +33,7 @@
                                 Tasks
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="{% url 'tasks:task-search' %}">Search Tasks</a></li>
                                 <li><a class="dropdown-item" href="{% url 'tasks:task-list' %}">All Tasks</a></li>
                                 <li><a class="dropdown-item" href="{% url 'tasks:task-create' %}">New Task</a></li>
                             </ul>
