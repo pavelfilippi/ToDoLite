@@ -45,4 +45,4 @@ class TaskEditForm(forms.ModelForm):
 
 
 class SearchForm(forms.Form):
-    query = forms.CharField()
+    query = forms.CharField(required=False, widget=forms.TextInput(attrs={'placeholder': 'Type your search query here:'}),  label="")
