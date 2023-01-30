@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
+from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank, TrigramSimilarity
 from django.db.models import F
 from django.db.models.functions import Lower
 from django.http import HttpResponseRedirect
@@ -82,10 +82,7 @@ def delete_task(request, pk):
 
 @login_required
 def search_task(request):
-    """ Search task by its title """
-
-
-def post_search(request):
+    """Search task by its title"""
     form = SearchForm()
     query = None
     results = []
@@ -94,11 +91,15 @@ def post_search(request):
         form = SearchForm(request.GET)
         if form.is_valid():
             query = form.cleaned_data["query"]
-            # config below sets stemming in another languages, ie config="spanish"
-            search_vector = SearchVector("title", "body", config="english")
-            search_query = SearchQuery(query, config="english")
-            results = Task.objects.annotate(
-                search=search_vector, rank=SearchRank(search_vector, search_query)
-            ).filter(search=search_query).order_by("-rank")
+            # More details on search in Django 4 By Example - Antonio Mele, p. 130
+            # https://docs.djangoproject.com/en/4.1/ref/contrib/postgres/search/#trigram-similarity
+            # https://www.postgresql.org/docs/current/pgtrgm.html
+            # If you keep running in to `unable to get repr for <class 'django.db.models.query.QuerySet'>`
+            # You probably don't have installed pg_trgm extension in your db
+            results = (
+                Task.objects.annotate(similarity=TrigramSimilarity("title", query))
+                .filter(similarity__gt=0.1)
+                .order_by("-similarity")
+            )
 
-    return render(request, "tasks/search.html", {"form": form, "query": query, "results": results})
+    return render(request, "tasks/search.html", {"form": form, "query": query, "tasks": results})
