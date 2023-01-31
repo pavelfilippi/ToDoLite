@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from .forms import UserRegistrationForm, LoginForm
 from .models import Profile
@@ -47,3 +47,13 @@ def profile_detail(request):
     user_profile = Profile.objects.get(id=request.user.profile.id)
 
     return render(request, "account/detail.html", {"user_profile": user_profile})
+
+
+@login_required
+def profile_delete(request):
+    if request.method == "POST":
+        user = request.user
+        user.delete()
+        return redirect("tasks:home")
+
+    return render(request, "account/delete_profile.html")

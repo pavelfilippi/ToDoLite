@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Create an account{% endblock %}
+
+{% block content %}
+
+    <section class="h-100 h-custom">
+        <div class="container py-5 h-100">
+            <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="col-lg-8 col-xl-6">
+                    <div class="card rounded-3">
+                        <div class="card-body p-4 p-md-5">
+                        <h3>Are you sure you want to delete your profile?</h3>
+
+                        <form class="mt-4" method="post">
+                            {% csrf_token %}
+                            <input class="btn btn-danger" type="submit" value="Yes, delete my profile">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock content %}

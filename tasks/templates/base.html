@@ -38,8 +38,15 @@
                                 <li><a class="dropdown-item" href="{% url 'tasks:task-create' %}">New Task</a></li>
                             </ul>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'account:profile-detail' %}">Account</a>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                               data-bs-toggle="dropdown" aria-expanded="false">
+                                Profile
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="{% url 'account:profile-detail' %}">Detail</a></li>
+                                <li><a class="dropdown-item" href="{% url 'account:profile-delete' %}">Delete</a></li>
+                            </ul>
                         </li>
                     {% endif %}
                 </ul>
