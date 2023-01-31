@@ -42,3 +42,9 @@ class TaskEditForm(forms.ModelForm):
         if due_date and due_date < timezone.now().date():
             raise forms.ValidationError("The due date cannot be in the past.")
         return due_date
+
+
+class SearchForm(forms.Form):
+    query = forms.CharField(
+        required=False, widget=forms.TextInput(attrs={"placeholder": "Type your search query here:"}), label=""
+    )

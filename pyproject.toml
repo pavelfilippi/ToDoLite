@@ -11,6 +11,7 @@ Django = "^4.1.4"
 django-crispy-forms = "^1.14.0"
 crispy-bootstrap5 = "^0.7"
 django-taggit = "^3.1.0"
+psycopg2-binary = "^2.9.5"
 
 [tool.poetry.dev-dependencies]
 black = "^22.12.0"

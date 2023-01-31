@@ -1,12 +1,14 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.postgres.search import TrigramSimilarity
 from django.db.models import F
 from django.db.models.functions import Lower
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from taggit.models import Tag
-from .forms import TaskForm, TaskEditForm
+
+from .forms import TaskForm, TaskEditForm, SearchForm
 from .models import Task
 
 
@@ -76,3 +78,28 @@ def delete_task(request, pk):
         return HttpResponseRedirect(reverse("tasks:task-list"))
 
     return render(request, "tasks/delete.html", context={"task": task})
+
+
+@login_required
+def search_task(request):
+    """Search task by its title"""
+    form = SearchForm()
+    query = None
+    results = []
+
+    if "query" in request.GET:
+        form = SearchForm(request.GET)
+        if form.is_valid():
+            query = form.cleaned_data["query"]
+            # More details on search in Django 4 By Example - Antonio Mele, p. 130
+            # https://docs.djangoproject.com/en/4.1/ref/contrib/postgres/search/#trigram-similarity
+            # https://www.postgresql.org/docs/current/pgtrgm.html
+            # If you keep running in to `unable to get repr for <class 'django.db.models.query.QuerySet'>`
+            # You probably don't have installed pg_trgm extension in your db
+            results = (
+                Task.objects.annotate(similarity=TrigramSimilarity("title", query))
+                .filter(similarity__gt=0.1)
+                .order_by("-similarity")
+            )
+
+    return render(request, "tasks/search.html", {"form": form, "query": query, "tasks": results})
