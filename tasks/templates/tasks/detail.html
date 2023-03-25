@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load tasks_tags %}
+
+
+{% block content %}
+    <section class="h-100 h-custom">
+        <div class="container border border mt-5 py-3 px-3 h-100">
+            <div class="justify-content-center align-items-center h-100">
+                <h1>{{ task.title }}</h1>
+                <small>Created {{ task.created_at }}</small>
+                <div>
+                    {% if task.tags.all %}
+                    {% for tag in task.tags.all %}
+                        <span class="badge rounded-pill bg-info text-dark">
+                            {{ tag.name }}
+                        </span>
+                    {% endfor %}
+                {% endif %}
+                </div>
+                {% if task.body %}
+                    <div class="px-3 py-3">
+                        <hr>
+                        {{ task.body|markdown }}
+                    </div>
+                {% endif %}
+                <hr>
+                <small><a href="{% url "tasks:task-edit" task.id %}">Edit</a></small>
+            </div>
+        </div>
+    </section>
+{% endblock content %}

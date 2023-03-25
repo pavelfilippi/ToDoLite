@@ -13,4 +13,5 @@ urlpatterns = [
     path("tag/<slug:tag_slug>", views.list_task, name="task-list-by-tag"),
     path("<int:pk>/edit", views.edit_task, name="task-edit"),
     path("<int:pk>/delete", views.delete_task, name="task-delete"),
+    path("<int:pk>/detail", views.task_detail, name="task-detail"),
 ]

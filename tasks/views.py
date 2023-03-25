@@ -52,6 +52,12 @@ def list_task(request, tag_slug=None):
 
 
 @login_required
+def task_detail(request, pk):
+    task = get_object_or_404(Task, author=request.user.profile, pk=pk)
+
+    return render(request, "tasks/detail.html", context={"task": task})
+
+@login_required
 def edit_task(request, pk):
     """Edit task"""
     task = Task.objects.get(author=request.user.profile, pk=pk)
