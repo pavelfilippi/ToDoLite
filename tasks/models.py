@@ -6,6 +6,7 @@ from account.models import Profile
 
 class Task(models.Model):
     title = models.CharField(max_length=255)
+    body = models.TextField(blank=True, null=True)
     completed = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
