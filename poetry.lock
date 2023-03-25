@@ -146,6 +146,17 @@ pycodestyle = ">=2.10.0,<2.11.0"
 pyflakes = ">=3.0.0,<3.1.0"
 
 [[package]]
+name = "markdown"
+version = "3.4.3"
+description = "Python implementation of John Gruber's Markdown."
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[package.extras]
+testing = ["coverage", "pyyaml"]
+
+[[package]]
 name = "mccabe"
 version = "0.7.0"
 description = "McCabe checker, plugin for flake8"
@@ -275,7 +286,7 @@ python-versions = ">=2"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "9140b78cfecb78529bdab72b20b5fbdfb7adeffa101315110196e172bed6a386"
+content-hash = "ccd9b1378715e2e1dce63b634e66fe687eb610120af95154a1dffc8a7f71bcf9"
 
 [metadata.files]
 asgiref = []
@@ -295,6 +306,7 @@ django-stubs = []
 django-stubs-ext = []
 django-taggit = []
 flake8 = []
+markdown = []
 mccabe = []
 mypy = []
 mypy-extensions = []
