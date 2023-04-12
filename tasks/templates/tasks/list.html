@@ -37,7 +37,7 @@
                                     <p class="fw-normal mb-1">{{ t.due_date }}</p>
                                 </td>
                                 <td>{{ t.completed }}</td>
-                                <td><a class="link-secondary" href="{% url 'tasks:task-edit' t.pk %}">edit</a></td>
+                                <td><a class="link-secondary" href="{% url 'tasks:task-detail' t.pk %}">detail</a></td>
                                 <td><a class="link-secondary" href="{% url 'tasks:task-delete' t.pk %}">delete</a></td>
                             </tr>
                         {% endfor %}

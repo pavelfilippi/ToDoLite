@@ -12,7 +12,7 @@ class TaskForm(forms.ModelForm):
 
     class Meta:
         model = Task
-        fields = ["title", "due_date", "tags"]
+        fields = ["title", "body", "due_date", "tags"]
         widgets = {
             "due_date": forms.DateInput(attrs={"class": "datepicker", "type": "date"}),
             "tags": TagWidget(),
@@ -29,13 +29,14 @@ class TaskEditForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["title"].required = False
+        self.fields["body"].required = False
         self.fields["due_date"].required = False
         self.fields["completed"].required = False
         self.fields["tags"].required = False
 
     class Meta:
         model = Task
-        fields = ["title", "due_date", "completed", "tags"]
+        fields = ["title", "body", "due_date", "completed", "tags"]
         widgets = {
             "due_date": forms.DateInput(attrs={"class": "datepicker", "type": "date"}),
             "tags": TagWidget(),
